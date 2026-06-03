@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>특강 신청 · 문의하기 | NPL 사관학교</title>
+  <meta name="description" content="문정수 교수 NPL 경매 핵심 특강 신청 및 문의. 오프라인 직강 일정, 단체 신청, 기타 문의를 남겨주세요.">
+  <link rel="canonical" href="https://moonnpl.co.kr/contact.html">
+  <meta property="og:title" content="특강 신청 · 문의하기 | NPL 사관학교">
+  <meta property="og:url" content="https://moonnpl.co.kr/contact.html">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .contact-info-box {
+      background: var(--primary);
+      border-radius: 16px;
+      padding: 36px 32px;
+      color: white;
+    }
+    .contact-info-box h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+    .contact-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .contact-item .ci-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-item .ci-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .contact-item .ci-value {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+    .notice-box {
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-top: 24px;
+    }
+    .notice-box p {
+      font-size: 0.84rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+    .notice-box strong { color: var(--accent); }
+    /* Form */
+    .form-card {
+      background: var(--bg-light);
+      border-radius: 16px;
+      padding: 36px 32px;
+    }
+    .form-card h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-gray);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 0.93rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+    }
+    .form-group textarea { min-height: 130px; resize: vertical; line-height: 1.7; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .submit-btn {
+      width: 100%;
+      background: var(--accent);
+      color: var(--primary);
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .submit-btn:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .form-note {
+      font-size: 0.78rem;
+      color: var(--text-gray);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+    .success-msg {
+      display: none;
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #27ae60;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 16px;
+    }
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "NPL 사관학교 특강 신청 · 문의",
+    "url": "https://moonnpl.co.kr/contact.html",
+    "description": "문정수 교수 NPL 경매 핵심 특강 신청 및 문의 페이지",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "홈", "item": "https://moonnpl.co.kr/"},
+        {"@type": "ListItem", "position": 2, "name": "문의하기", "item": "https://moonnpl.co.kr/contact.html"}
+      ]
+    }
+  }
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">NPL 사관학교</a>
+    <nav id="main-nav">
+      <ul>
+        <li><a href="npl-intro.html">NPL이란?</a></li>
+        <li><a href="npl-invest.html">NPL 투자 방법</a></li>
+        <li><a href="office-buy.html">사옥·건물 취득</a></li>
+        <li><a href="store-buy.html">매장·상가 취득</a></li>
+        <li><a href="professor.html">문정수 교수</a></li>
+        <li><a href="reviews.html">수강 후기</a></li>
+        <li><a href="lecture.html" class="nav-cta">특강 신청하기 →</a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="breadcrumb">
+    <a href="index.html">홈</a>
+    <span class="sep">›</span>
+    <span class="current">특강 신청 · 문의하기</span>
+  </div>
+  <h1>특강 신청 · <em>문의하기</em></h1>
+  <p>NPL 경매 핵심 특강 신청 및 궁금한 점을 남겨주세요<br>빠르게 확인 후 연락드리겠습니다</p>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- 왼쪽: 안내 정보 -->
+      <div>
+        <div class="contact-info-box">
+          <h2>📞 문의 안내</h2>
+
+          <div class="contact-item">
+            <span class="ci-icon">🎓</span>
+            <div>
+              <span class="ci-label">강사</span>
+              <span class="ci-value">문정수 교수 (NPL 사관학교)</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="ci-icon">📍</span>
+            <div>
+              <span class="ci-label">강의 형태</span>
+              <span class="ci-value">오직 오프라인 직강만 진행</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="ci-icon">📅</span>
+            <div>
+              <span class="ci-label">일정</span>
+              <span class="ci-value">문의 후 개별 안내</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="ci-icon">👥</span>
+            <div>
+              <span class="ci-label">수강 대상</span>
+              <span class="ci-value">NPL 입문자 / 사옥·매장 취득 희망자<br>소액 투자자 / 부동산 경험자 / 법인</span>
+            </div>
+          </div>
+
+          <div class="notice-box">
+            <p>
+              <strong>신청 후 안내 절차</strong><br>
+              문의 접수 → 담당자 확인 → 특강 일정 및 장소 개별 안내 순서로 진행됩니다.
+              보통 1~2 영업일 내에 회신드립니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 문의 폼 -->
+      <div class="form-card">
+        <h2>✉️ 특강 신청 · 문의 남기기</h2>
+
+        <form id="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>이름 *</label>
+              <input type="text" id="cf-name" placeholder="홍길동" required>
+            </div>
+            <div class="form-group">
+              <label>연락처 *</label>
+              <input type="tel" id="cf-phone" placeholder="010-0000-0000" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>이메일</label>
+            <input type="email" id="cf-email" placeholder="example@email.com">
+          </div>
+
+          <div class="form-group">
+            <label>문의 유형 *</label>
+            <select id="cf-type" required>
+              <option value="">선택해주세요</option>
+              <option value="특강 신청">특강 신청</option>
+              <option value="단체 신청">단체 신청 (5인 이상)</option>
+              <option value="일정 문의">특강 일정 문의</option>
+              <option value="내용 문의">강의 내용 문의</option>
+              <option value="기타">기타 문의</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>관심 분야</label>
+            <select id="cf-interest">
+              <option value="">선택해주세요 (선택사항)</option>
+              <option value="NPL 입문">NPL 투자 입문</option>
+              <option value="사옥 취득">사옥·건물 취득</option>
+              <option value="매장 취득">매장·상가 취득</option>
+              <option value="소액 투자">소액 개인 투자</option>
+              <option value="법인 투자">법인 NPL 투자</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>문의 내용</label>
+            <textarea id="cf-message" placeholder="궁금한 점이나 특강 신청 관련 내용을 자유롭게 작성해주세요."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            문의 신청하기 →
+          </button>
+          <p class="form-note">
+            입력하신 정보는 특강 안내 목적으로만 사용되며, 제3자에게 제공되지 않습니다.
+          </p>
+        </form>
+
+        <div class="success-msg" id="success-msg">
+          ✅ 문의가 접수되었습니다!<br>
+          <span style="font-size:0.9rem;font-weight:400;color:#555;display:block;margin-top:6px;">1~2 영업일 내에 연락드리겠습니다.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <h2>지금 바로 특강을 신청하세요</h2>
+  <p>대한민국 최초 NPL 강의 개설자 문정수 교수의 오프라인 직강</p>
+  <a href="lecture.html" class="btn-dark">특강 안내 보기 →</a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">NPL 사관학교</a>
+        <p>대한민국 최초 NPL 강의 개설자 문정수 교수의 NPL 경매 교육 전문 사이트</p>
+      </div>
+      <div class="footer-links">
+        <h4>NPL 배우기</h4>
+        <ul>
+          <li><a href="npl-intro.html">NPL이란?</a></li>
+          <li><a href="npl-invest.html">NPL 투자 방법</a></li>
+          <li><a href="office-buy.html">사옥·건물 취득</a></li>
+          <li><a href="store-buy.html">매장·상가 취득</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>안내</h4>
+        <ul>
+          <li><a href="lecture.html">NPL 특강 신청</a></li>
+          <li><a href="professor.html">문정수 교수</a></li>
+          <li><a href="reviews.html">수강 후기</a></li>
+          <li><a href="contact.html">문의하기</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 NPL 사관학교. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  // 실제 배포 시 이메일 서비스(Formspree, EmailJS 등) 연동 필요
+  // 현재는 접수 확인 메시지만 표시
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+  // 데이터 수집 (추후 백엔드 연동용)
+  const data = {
+    name: document.getElementById('cf-name').value,
+    phone: document.getElementById('cf-phone').value,
+    email: document.getElementById('cf-email').value,
+    type: document.getElementById('cf-type').value,
+    interest: document.getElementById('cf-interest').value,
+    message: document.getElementById('cf-message').value,
+    submittedAt: new Date().toISOString()
+  };
+  // localStorage에 임시 저장 (백엔드 연동 전까지)
+  const inquiries = JSON.parse(localStorage.getItem('npl_inquiries') || '[]');
+  inquiries.unshift(data);
+  localStorage.setItem('npl_inquiries', JSON.stringify(inquiries));
+}
+</script>
+</body>
+</html>

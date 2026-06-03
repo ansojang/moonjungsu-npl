@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 — 문정수 NPL 사이트</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap">
+  <style>
+    :root {
+      --bg: #080f18;
+      --surface: #0d2137;
+      --surface2: #122840;
+      --accent: #c9a84c;
+      --accent-light: #e8c060;
+      --border: rgba(255,255,255,0.08);
+      --text: rgba(255,255,255,0.88);
+      --text-muted: rgba(255,255,255,0.45);
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --warning: #e67e22;
+      --font: 'Noto Sans KR', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ===== LOGIN ===== */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(ellipse at 30% 50%, rgba(30,73,118,0.3) 0%, transparent 60%), var(--bg);
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-logo { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 6px; line-height:1.2; }
+    .login-logo small { display:block; font-size:0.65rem; font-weight:500; color:rgba(255,255,255,0.45); }
+    .login-sub { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 36px; }
+
+    .login-box h2 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 24px; }
+
+    .login-err {
+      background: rgba(231,76,60,0.12);
+      border: 1px solid rgba(231,76,60,0.3);
+      color: var(--danger);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ===== ADMIN SHELL ===== */
+    #admin-shell { display: none; flex: 1; min-height: 100vh; }
+    #admin-shell.show { display: flex; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-head {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-head .logo { font-size: 1rem; font-weight: 800; color: #fff; display: block; }
+    .sidebar-head .logo span { color: var(--accent); }
+    .sidebar-head small { color: var(--text-muted); font-size: 0.75rem; }
+
+    .sidebar-section {
+      padding: 16px 20px 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: #fff; }
+    .nav-item.active { background: rgba(201,168,76,0.1); color: var(--accent); border-left-color: var(--accent); }
+
+    .nav-item .icon { font-size: 1rem; flex-shrink: 0; }
+    .nav-item .label { flex: 1; font-weight: 500; }
+    .nav-item .cnt {
+      background: rgba(201,168,76,0.18);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Main area */
+    .admin-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .admin-topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .topbar-title { font-size: 1rem; font-weight: 700; color: #fff; }
+    .topbar-actions { display: flex; gap: 8px; }
+
+    .admin-content { flex: 1; overflow-y: auto; padding: 28px; }
+
+    /* ===== COMMON COMPONENTS ===== */
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-gold { background: var(--accent); color: #0d2137; }
+    .btn-gold:hover { background: var(--accent-light); }
+    .btn-ghost { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.7); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn-danger { background: rgba(231,76,60,0.12); color: var(--danger); border: 1px solid rgba(231,76,60,0.25); }
+    .btn-danger:hover { background: rgba(231,76,60,0.22); }
+    .btn-success { background: rgba(46,204,113,0.12); color: var(--success); border: 1px solid rgba(46,204,113,0.25); }
+    .btn-success:hover { background: rgba(46,204,113,0.22); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+    .btn-lg { padding: 12px 28px; font-size: 1rem; }
+
+    /* Form */
+    .form-group { margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 6px;
+    }
+
+    .form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; }
+
+    input[type=text], input[type=password], textarea, select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); background: rgba(255,255,255,0.07); }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+    select option { background: #0d2137; }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
+
+    .char-cnt { font-size: 0.75rem; color: var(--text-muted); text-align: right; margin-top: 4px; }
+    .char-cnt.warn { color: var(--warning); }
+    .char-cnt.over { color: var(--danger); }
+
+    /* Card */
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    /* Alert */
+    .alert {
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .alert.show { display: block; }
+    .alert-success { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.25); color: var(--success); }
+    .alert-error { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.25); color: var(--danger); }
+
+    /* Table */
+    .post-table { width: 100%; border-collapse: collapse; }
+    .post-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .post-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      vertical-align: middle;
+    }
+    .post-table tr:hover td { background: rgba(255,255,255,0.025); }
+    .post-table td:first-child { font-weight: 600; max-width: 320px; }
+    .post-title-cell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; display: block; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .badge-pub { background: rgba(46,204,113,0.15); color: var(--success); }
+    .badge-draft { background: rgba(255,255,255,0.07); color: var(--text-muted); }
+
+    /* Actions column */
+    .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; }
+
+    /* ===== EDITOR ===== */
+    .editor-wrap { }
+
+    .editor-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 8px 10px;
+    }
+
+    .tb-btn {
+      background: rgba(255,255,255,0.06);
+      border: none;
+      color: rgba(255,255,255,0.75);
+      padding: 5px 9px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+    }
+    .tb-btn:hover { background: var(--accent); color: #0d2137; font-weight: 700; }
+    .tb-sep { width: 1px; background: rgba(255,255,255,0.1); margin: 3px 4px; }
+
+    .editor-body {
+      min-height: 420px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0 0 8px 8px;
+      padding: 20px;
+      color: #fff;
+      outline: none;
+      line-height: 1.85;
+      font-size: 0.95rem;
+      overflow-y: auto;
+    }
+    .editor-body:focus { border-color: var(--accent); }
+    .editor-body:empty::before { content: attr(data-placeholder); color: rgba(255,255,255,0.2); pointer-events: none; }
+    .editor-body h2 { font-size: 1.35rem; color: var(--accent); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(201,168,76,0.3); }
+    .editor-body h3 { font-size: 1.05rem; color: var(--accent-light); margin: 16px 0 8px; }
+    .editor-body p { margin-bottom: 12px; color: rgba(255,255,255,0.82); }
+    .editor-body ul, .editor-body ol { padding-left: 22px; margin-bottom: 12px; color: rgba(255,255,255,0.82); }
+    .editor-body li { margin-bottom: 5px; }
+    .editor-body strong { color: #fff; font-weight: 700; }
+    .editor-body a { color: var(--accent); }
+    .editor-body blockquote { border-left: 3px solid var(--accent); padding: 10px 16px; background: rgba(201,168,76,0.08); border-radius: 0 6px 6px 0; margin: 12px 0; color: rgba(255,255,255,0.75); }
+    .editor-body .key-box { background: rgba(13,33,55,0.6); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 16px; margin: 16px 0; }
+
+    /* Dashboard stats */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num { font-size: 2rem; font-weight: 900; color: var(--accent); }
+    .stat-card .lbl { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* Section headers */
+    .section-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .section-hd h2 { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .section-hd p { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+
+    /* Tab buttons for status filter */
+    .tab-row { display: flex; gap: 6px; margin-bottom: 16px; }
+    .tab-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      transition: all 0.15s;
+    }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0d2137; }
+    .tab-btn:hover:not(.active) { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); }
+
+    /* Confirm modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .modal-box h3 { font-size: 1.1rem; color: #fff; margin-bottom: 8px; }
+    .modal-box p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .form-row { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">NPL 사관학교</div>
+    <div class="login-sub">사이트 관리자 시스템</div>
+    <h2>🔐 관리자 로그인</h2>
+    <div class="login-err" id="login-err">비밀번호가 올바르지 않습니다.</div>
+    <div class="form-group">
+      <input type="password" id="pw-input" placeholder="관리자 비밀번호" autocomplete="current-password">
+    </div>
+    <button class="btn btn-gold btn-lg" style="width:100%" onclick="doLogin()">로그인</button>
+    <p style="margin-top:16px;font-size:0.78rem;color:var(--text-muted)">기본 비밀번호: npl2026 (admin.html 상단에서 변경 가능)</p>
+  </div>
+</div>
+
+<!-- ===== ADMIN SHELL ===== -->
+<div id="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <a href="index.html" target="_blank" class="logo">NPL 사관학교</a>
+      <small>관리자 패널</small>
+    </div>
+
+    <div class="sidebar-section">대시보드</div>
+    <div class="nav-item active" onclick="showView('dashboard')" id="nav-dashboard">
+      <span class="icon">📊</span><span class="label">전체 현황</span>
+    </div>
+
+    <div class="sidebar-section">키워드 메뉴</div>
+    <div class="nav-item" onclick="showCategory('npl-intro')" id="nav-npl-intro">
+      <span class="icon">📖</span><span class="label">NPL이란?</span>
+      <span class="cnt" id="cnt-npl-intro">0</span>
+    </div>
+    <div class="nav-item" onclick="showCategory('npl-invest')" id="nav-npl-invest">
+      <span class="icon">📈</span><span class="label">NPL 투자 방법</span>
+      <span class="cnt" id="cnt-npl-invest">0</span>
+    </div>
+    <div class="nav-item" onclick="showCategory('office-buy')" id="nav-office-buy">
+      <span class="icon">🏢</span><span class="label">사옥·건물 취득</span>
+      <span class="cnt" id="cnt-office-buy">0</span>
+    </div>
+    <div class="nav-item" onclick="showCategory('store-buy')" id="nav-store-buy">
+      <span class="icon">🏪</span><span class="label">매장·상가 취득</span>
+      <span class="cnt" id="cnt-store-buy">0</span>
+    </div>
+
+    <div class="sidebar-section">관리</div>
+    <div class="nav-item" onclick="showView('export')">
+      <span class="icon">⬇️</span><span class="label">JSON 내보내기</span>
+    </div>
+    <div class="nav-item" onclick="showView('import')">
+      <span class="icon">⬆️</span><span class="label">JSON 불러오기</span>
+    </div>
+    <div class="nav-item" onclick="showView('settings')">
+      <span class="icon">⚙️</span><span class="label">설정</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="index.html" target="_blank" class="btn btn-ghost btn-sm">사이트 보기 →</a>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">로그아웃</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">전체 현황</div>
+      </div>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </div>
+
+    <div class="admin-content" id="admin-content">
+      <!-- 동적 렌더링 -->
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <h3 id="modal-title">삭제하시겠습니까?</h3>
+    <p id="modal-msg">이 작업은 되돌릴 수 없습니다.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-danger" id="modal-confirm-btn">삭제</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/posts.js"></script>
+<script>
+// ===== 설정 =====
+// 비밀번호를 변경하려면 아래 값을 수정하세요
+const ADMIN_PASSWORD = 'npl2026';
+const AUTH_KEY = 'npl_auth';
+
+// ===== 현재 상태 =====
+let currentView = 'dashboard';
+let currentCategory = null;
+let editingPostId = null;
+let filterStatus = 'all';
+
+// ===== 로그인 =====
+function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PASSWORD) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').classList.add('show');
+    updateBadges();
+    showView('dashboard');
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function doLogout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+
+// 자동 로그인 체크
+if (sessionStorage.getItem(AUTH_KEY) === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-shell').classList.add('show');
+}
+
+// ===== 뱃지 업데이트 =====
+function updateBadges() {
+  const stats = PostsDB.stats();
+  Object.keys(PostsDB.CATEGORIES).forEach(cat => {
+    const el = document.getElementById('cnt-' + cat);
+    if (el) el.textContent = stats[cat] ? stats[cat].total : 0;
+  });
+}
+
+// ===== 뷰 전환 =====
+function setActiveNav(navId) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById(navId);
+  if (target) target.classList.add('active');
+}
+
+function showView(view) {
+  currentView = view;
+  currentCategory = null;
+  editingPostId = null;
+  setActiveNav('nav-' + view);
+
+  const content = document.getElementById('admin-content');
+  const topbarTitle = document.getElementById('topbar-title');
+  const topbarActions = document.getElementById('topbar-actions');
+  topbarActions.innerHTML = '';
+
+  if (view === 'dashboard') {
+    topbarTitle.textContent = '전체 현황';
+    renderDashboard(content);
+  } else if (view === 'export') {
+    topbarTitle.textContent = 'JSON 내보내기';
+    renderExport(content);
+  } else if (view === 'import') {
+    topbarTitle.textContent = 'JSON 불러오기';
+    renderImport(content);
+  } else if (view === 'settings') {
+    topbarTitle.textContent = '설정';
+    renderSettings(content);
+  }
+}
+
+function showCategory(cat) {
+  currentCategory = cat;
+  editingPostId = null;
+  filterStatus = 'all';
+  setActiveNav('nav-' + cat);
+
+  const catInfo = PostsDB.CATEGORIES[cat];
+  document.getElementById('topbar-title').textContent = catInfo.name;
+  const topbarActions = document.getElementById('topbar-actions');
+  topbarActions.innerHTML = `<button class="btn btn-gold" onclick="showEditor(null, '${cat}')">+ 새 글 쓰기</button>`;
+
+  renderPostList(cat);
+}
+
+// ===== 대시보드 =====
+function renderDashboard(container) {
+  const stats = PostsDB.stats();
+  const allPosts = PostsDB.getAll();
+  const totalPublished = allPosts.filter(p => p.status === 'published').length;
+  const totalDraft = allPosts.filter(p => p.status === 'draft').length;
+
+  const cats = Object.entries(PostsDB.CATEGORIES);
+  const catRows = cats.map(([key, info]) => {
+    const s = stats[key] || { total:0, published:0, draft:0 };
+    return `<tr>
+      <td>${info.name}</td>
+      <td>${s.total}</td>
+      <td><span class="badge badge-pub">${s.published} 게시</span></td>
+      <td><span class="badge badge-draft">${s.draft} 임시</span></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="showCategory('${key}')">관리 →</button></td>
+    </tr>`;
+  }).join('');
+
+  const recentPosts = allPosts.slice(0, 5);
+  const recentRows = recentPosts.length > 0
+    ? recentPosts.map(p => {
+        const catName = PostsDB.CATEGORIES[p.category]?.name || p.category;
+        return `<tr>
+          <td><span class="post-title-cell">${p.title}</span></td>
+          <td>${catName}</td>
+          <td><span class="badge ${p.status === 'published' ? 'badge-pub' : 'badge-draft'}">${p.status === 'published' ? '게시' : '임시저장'}</span></td>
+          <td>${PostsDB.formatDate(p.updatedAt)}</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showEditor('${p.id}', '${p.category}')">수정</button></td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:32px">아직 작성한 글이 없습니다.</td></tr>`;
+
+  container.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="num">${allPosts.length}</div><div class="lbl">전체 포스팅</div></div>
+      <div class="stat-card"><div class="num" style="color:var(--success)">${totalPublished}</div><div class="lbl">게시 완료</div></div>
+      <div class="stat-card"><div class="num" style="color:var(--text-muted)">${totalDraft}</div><div class="lbl">임시저장</div></div>
+      <div class="stat-card"><div class="num">${cats.length}</div><div class="lbl">키워드 메뉴</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-hd"><div><h2>카테고리별 현황</h2></div></div>
+      <table class="post-table">
+        <thead><tr><th>카테고리</th><th>전체</th><th>게시</th><th>임시저장</th><th></th></tr></thead>
+        <tbody>${catRows}</tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-hd"><div><h2>최근 포스팅</h2></div></div>
+      <table class="post-table">
+        <thead><tr><th>제목</th><th>카테고리</th><th>상태</th><th>수정일</th><th></th></tr></thead>
+        <tbody>${recentRows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ===== 포스트 목록 =====
+function renderPostList(cat) {
+  const content = document.getElementById('admin-content');
+  const posts = PostsDB.getByCategory(cat);
+
+  const filtered = filterStatus === 'all' ? posts
+    : posts.filter(p => p.status === filterStatus);
+
+  const rows = filtered.length > 0
+    ? filtered.map(p => `
+        <tr>
+          <td><span class="post-title-cell">${p.title}</span></td>
+          <td><span class="badge ${p.status === 'published' ? 'badge-pub' : 'badge-draft'}">${p.status === 'published' ? '게시' : '임시저장'}</span></td>
+          <td>${PostsDB.formatDate(p.createdAt)}</td>
+          <td>${PostsDB.formatDate(p.updatedAt)}</td>
+          <td>
+            <div class="action-btns">
+              <button class="btn btn-ghost btn-sm" onclick="showEditor('${p.id}', '${cat}')">✏️ 수정</button>
+              <a href="post.html?id=${p.id}" target="_blank" class="btn btn-ghost btn-sm">👁️ 보기</a>
+              <button class="btn btn-danger btn-sm" onclick="confirmDelete('${p.id}')">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('')
+    : `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">
+        글이 없습니다. 새 글 쓰기를 눌러 작성하세요.
+      </td></tr>`;
+
+  const pubCount = posts.filter(p => p.status === 'published').length;
+  const draftCount = posts.filter(p => p.status === 'draft').length;
+
+  content.innerHTML = `
+    <div class="tab-row">
+      <button class="tab-btn ${filterStatus==='all'?'active':''}" onclick="setFilter('all', '${cat}')">전체 ${posts.length}</button>
+      <button class="tab-btn ${filterStatus==='published'?'active':''}" onclick="setFilter('published', '${cat}')">게시 ${pubCount}</button>
+      <button class="tab-btn ${filterStatus==='draft'?'active':''}" onclick="setFilter('draft', '${cat}')">임시저장 ${draftCount}</button>
+    </div>
+    <div class="card">
+      <table class="post-table">
+        <thead><tr><th>제목</th><th>상태</th><th>작성일</th><th>수정일</th><th>작업</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function setFilter(status, cat) {
+  filterStatus = status;
+  renderPostList(cat);
+}
+
+// ===== 에디터 =====
+function showEditor(postId, cat) {
+  editingPostId = postId;
+  const post = postId ? PostsDB.getById(postId) : null;
+  const isNew = !post;
+  const catInfo = PostsDB.CATEGORIES[cat];
+
+  document.getElementById('topbar-title').textContent = isNew ? '새 글 쓰기' : '글 수정';
+  const topbarActions = document.getElementById('topbar-actions');
+  topbarActions.innerHTML = `
+    <button class="btn btn-ghost" onclick="showCategory('${cat}')">← 목록</button>
+  `;
+
+  const content = document.getElementById('admin-content');
+
+  content.innerHTML = `
+    <div id="editor-alert" class="alert"></div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label>카테고리</label>
+          <select id="ed-category">
+            ${Object.entries(PostsDB.CATEGORIES).map(([k,v]) =>
+              `<option value="${k}" ${(cat===k||post?.category===k)?'selected':''}>${v.name}</option>`
+            ).join('')}
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>상태</label>
+          <select id="ed-status">
+            <option value="draft" ${post?.status!=='published'?'selected':''}>임시저장</option>
+            <option value="published" ${post?.status==='published'?'selected':''}>게시 (공개)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="form-group">
+        <label>글 제목 (H1 · 페이지 제목)</label>
+        <input type="text" id="ed-title" placeholder="SEO에 최적화된 핵심 키워드를 포함한 제목을 입력하세요">
+        <div class="form-hint">예) "NPL 경매로 사옥 저렴하게 사는 5가지 방법"</div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>메타 설명 (검색 결과에 노출되는 요약 · 145~155자 권장)</label>
+        <textarea id="ed-meta" placeholder="이 글의 핵심 내용을 한~두 문장으로 요약하세요. 검색 결과에 그대로 노출됩니다." rows="3"></textarea>
+        <div class="char-cnt" id="meta-cnt">0 / 155자</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <label style="margin-bottom:10px;">본문 내용</label>
+      <div class="editor-wrap">
+        <div class="editor-toolbar">
+          <button class="tb-btn" onclick="cmd('bold')" title="굵게"><b>B</b></button>
+          <button class="tb-btn" onclick="cmd('italic')" title="기울임"><i>I</i></button>
+          <button class="tb-btn" onclick="cmd('underline')" title="밑줄"><u>U</u></button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertH2()" title="제목2">H2</button>
+          <button class="tb-btn" onclick="insertH3()" title="제목3">H3</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="cmd('insertUnorderedList')" title="목록">• 목록</button>
+          <button class="tb-btn" onclick="cmd('insertOrderedList')" title="번호목록">1. 목록</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertBlockquote()" title="인용">❝ 인용</button>
+          <button class="tb-btn" onclick="insertKeyBox()" title="핵심 포인트 박스">📌 핵심박스</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertLink()" title="링크">🔗 링크</button>
+          <button class="tb-btn" onclick="cmd('removeFormat')" title="서식 제거">✕ 서식</button>
+          <div class="tb-sep"></div>
+          <button class="tb-btn" onclick="insertFaq()" title="FAQ 삽입">❓ FAQ</button>
+          <button class="tb-btn" onclick="insertCTA()" title="특강 CTA 삽입">🎓 CTA</button>
+        </div>
+        <div
+          class="editor-body"
+          id="editor-body"
+          contenteditable="true"
+          data-placeholder="본문 내용을 입력하세요. SEO에 유리한 글은 1,000자 이상, H2로 소제목을 나눠주세요."
+        ></div>
+      </div>
+      <div style="margin-top:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:0.75rem;color:var(--text-muted)">💡 팁: H2로 소제목 분리, 굵게로 키워드 강조, 목록으로 가독성 향상</div>
+        <div class="char-cnt" id="body-cnt">0자</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-gold btn-lg" onclick="savePost('published')">✅ 게시하기</button>
+      <button class="btn btn-ghost btn-lg" onclick="savePost('draft')">💾 임시저장</button>
+      <button class="btn btn-ghost" onclick="showCategory('${cat}')">취소</button>
+    </div>
+  `;
+
+  // Set values safely (prevents XSS / quote-breaking bug)
+  const titleEl = document.getElementById('ed-title');
+  const metaTextEl = document.getElementById('ed-meta');
+  if (post) {
+    titleEl.value = post.title || '';
+    metaTextEl.value = post.metaDescription || '';
+  }
+
+  // Set editor content
+  const editorBody = document.getElementById('editor-body');
+  if (post?.content) editorBody.innerHTML = post.content;
+
+  // Char counters
+  const metaEl = document.getElementById('ed-meta');
+  const metaCnt = document.getElementById('meta-cnt');
+  const bodyCnt = document.getElementById('body-cnt');
+
+  function updateMeta() {
+    const len = metaEl.value.length;
+    metaCnt.textContent = `${len} / 155자`;
+    metaCnt.className = 'char-cnt' + (len > 155 ? ' over' : len > 130 ? ' warn' : '');
+  }
+  function updateBody() {
+    const len = editorBody.innerText.length;
+    bodyCnt.textContent = `${len}자`;
+  }
+  metaEl.addEventListener('input', updateMeta);
+  editorBody.addEventListener('input', updateBody);
+  updateMeta(); updateBody();
+}
+
+// Editor commands
+function cmd(command, value) {
+  document.getElementById('editor-body').focus();
+  document.execCommand(command, false, value);
+}
+
+function insertH2() {
+  document.getElementById('editor-body').focus();
+  document.execCommand('formatBlock', false, 'h2');
+}
+
+function insertH3() {
+  document.getElementById('editor-body').focus();
+  document.execCommand('formatBlock', false, 'h3');
+}
+
+function insertBlockquote() {
+  document.getElementById('editor-body').focus();
+  document.execCommand('formatBlock', false, 'blockquote');
+}
+
+function insertKeyBox() {
+  const html = `<div class="key-box"><strong>📌 핵심 포인트</strong><ul><li>첫 번째 포인트를 입력하세요</li><li>두 번째 포인트</li><li>세 번째 포인트</li></ul></div><p></p>`;
+  document.getElementById('editor-body').focus();
+  document.execCommand('insertHTML', false, html);
+}
+
+function insertFaq() {
+  const html = `<h2>자주 묻는 질문 (FAQ)</h2><p><strong>Q. 질문을 입력하세요?</strong></p><p>A. 답변을 입력하세요.</p><p><strong>Q. 두 번째 질문?</strong></p><p>A. 두 번째 답변.</p>`;
+  document.getElementById('editor-body').focus();
+  document.execCommand('insertHTML', false, html);
+}
+
+function insertCTA() {
+  const html = `<blockquote>📚 <strong>NPL을 직접 배우고 싶다면?</strong><br>대한민국 최초 NPL 강의 개설자 문정수 교수의 NPL 경매 핵심 특강 — 오프라인 직강.<br><a href="lecture.html">→ 특강 신청하기</a></blockquote><p></p>`;
+  document.getElementById('editor-body').focus();
+  document.execCommand('insertHTML', false, html);
+}
+
+function insertLink() {
+  const url = prompt('링크 URL을 입력하세요:');
+  if (url) cmd('createLink', url);
+}
+
+// ===== 저장 =====
+function savePost(overrideStatus) {
+  const title = document.getElementById('ed-title').value.trim();
+  const meta = document.getElementById('ed-meta').value.trim();
+  const content = document.getElementById('editor-body').innerHTML;
+  const category = document.getElementById('ed-category').value;
+  const status = overrideStatus || document.getElementById('ed-status').value;
+
+  if (!title) {
+    showAlert('editor-alert', 'error', '⚠️ 글 제목을 입력하세요.');
+    document.getElementById('ed-title').focus();
+    return;
+  }
+
+  if (editingPostId) {
+    PostsDB.update(editingPostId, { title, metaDescription: meta, content, category, status });
+  } else {
+    PostsDB.create({ title, metaDescription: meta, content, category, status });
+  }
+
+  updateBadges();
+
+  const msg = status === 'published' ? '✅ 게시되었습니다!' : '💾 임시저장 되었습니다.';
+  showAlert('editor-alert', 'success', msg);
+
+  // 3초 후 목록으로
+  setTimeout(() => showCategory(category), 2000);
+}
+
+// ===== 삭제 =====
+let pendingDeleteId = null;
+
+function confirmDelete(id) {
+  const post = PostsDB.getById(id);
+  if (!post) return;
+  pendingDeleteId = id;
+  document.getElementById('modal-title').textContent = '포스팅을 삭제할까요?';
+  document.getElementById('modal-msg').textContent = `"${post.title}" — 삭제하면 되돌릴 수 없습니다.`;
+  document.getElementById('modal-confirm-btn').onclick = () => {
+    PostsDB.delete(pendingDeleteId);
+    updateBadges();
+    closeModal();
+    renderPostList(currentCategory);
+  };
+  document.getElementById('confirm-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('confirm-modal').classList.remove('show');
+  pendingDeleteId = null;
+}
+
+// ===== JSON 내보내기 / 불러오기 =====
+function renderExport(container) {
+  const json = PostsDB.exportJSON();
+  container.innerHTML = `
+    <div class="card">
+      <div class="section-hd"><div><h2>⬇️ JSON 내보내기</h2><p>모든 포스팅 데이터를 JSON 파일로 저장합니다.</p></div></div>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">총 ${PostsDB.getAll().length}개 포스팅이 저장됩니다. 파일을 안전한 곳에 백업해두세요.</p>
+      <button class="btn btn-gold btn-lg" onclick="downloadJSON()">📥 JSON 파일 다운로드</button>
+      <div style="margin-top:24px;">
+        <label style="margin-bottom:8px;">미리보기</label>
+        <textarea readonly style="height:300px;font-family:monospace;font-size:0.8rem;background:rgba(0,0,0,0.3)">${json}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function downloadJSON() {
+  const json = PostsDB.exportJSON();
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `npl-posts-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function renderImport(container) {
+  container.innerHTML = `
+    <div class="card">
+      <div class="section-hd"><div><h2>⬆️ JSON 불러오기</h2><p>백업한 JSON 파일로 포스팅 데이터를 복원합니다.</p></div></div>
+      <div id="import-alert" class="alert"></div>
+      <div class="form-group">
+        <label>JSON 파일 선택</label>
+        <input type="file" id="import-file" accept=".json" style="color:#fff;background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:8px;padding:16px">
+      </div>
+      <p style="color:var(--danger);font-size:0.85rem;margin-bottom:16px;">⚠️ 불러오기를 하면 현재 데이터가 모두 대체됩니다.</p>
+      <button class="btn btn-gold" onclick="importJSON()">불러오기 실행</button>
+    </div>
+  `;
+}
+
+function importJSON() {
+  const file = document.getElementById('import-file').files[0];
+  if (!file) { showAlert('import-alert','error','파일을 선택하세요.'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const count = PostsDB.importJSON(e.target.result);
+      updateBadges();
+      showAlert('import-alert','success',`✅ ${count}개 포스팅을 불러왔습니다.`);
+    } catch(err) {
+      showAlert('import-alert','error','⚠️ 파일 형식이 올바르지 않습니다.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== 설정 =====
+function renderSettings(container) {
+  container.innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <h2 style="color:#fff;margin-bottom:16px;">⚙️ 관리자 비밀번호 변경</h2>
+      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:20px;">비밀번호를 변경하려면 <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.82rem;">admin.html</code> 파일 내 <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.82rem;">ADMIN_PASSWORD</code> 값을 직접 수정하세요.</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:16px;font-family:monospace;font-size:0.85rem;color:#c9a84c;">
+        const ADMIN_PASSWORD = '<span style="color:#2ecc71">npl2026</span>';
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="color:#fff;margin-bottom:16px;">🌐 도메인 설정</h2>
+      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:16px;">사이트 배포 후 아래 파일들의 <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.82rem;">moonnpl.co.kr</code>을 실제 도메인으로 교체하세요.</p>
+      <ul style="color:rgba(255,255,255,0.7);font-size:0.88rem;padding-left:20px;line-height:2;">
+        <li>index.html</li>
+        <li>npl-intro.html, npl-invest.html, office-buy.html, store-buy.html</li>
+        <li>lecture.html, professor.html</li>
+        <li>sitemap.xml</li>
+        <li>llms.txt</li>
+      </ul>
+    </div>
+  `;
+}
+
+// ===== 유틸 =====
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = `alert alert-${type} show`;
+  el.textContent = msg;
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// 초기 로드
+if (sessionStorage.getItem(AUTH_KEY) === '1') {
+  updateBadges();
+  showView('dashboard');
+}
+</script>
+</body>
+</html>
