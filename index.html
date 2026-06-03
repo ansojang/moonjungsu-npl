@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="NPL 사관학교" />
 <meta property="og:url" content="https://moonnpl.co.kr/" />
 <meta property="og:locale" content="ko_KR" />
-<meta property="og:image" content="https://ansojang.github.io/LPL-_Edu/assets/professor.jpg" />
+<meta property="og:image" content="https://ansojang.github.io/LPL-_Edu/assets/lecture.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="국내 NPL 1호 문정수 교수 공개특강" />
 <meta name="twitter:description" content="경매보다 먼저, 채권을 사들여 게임을 끝내는 NPL(부실채권) 투자. 27년 국내 최장 경력 문정수 교수 직강." />
@@ -30,7 +30,7 @@
     { "@type": "Person", "@id": "https://moonnpl.co.kr/#professor", "name": "문정수", "alternateName": ["문정수 교수", "국내 1호 NPL 강사"], "jobTitle": "서울벤처대학원대학교 NPL·경매·공매 최고위과정 주임교수", "description": "대한민국에서 NPL 강의를 가장 처음 만든 사람. 27년간 한국에서 가장 오래 NPL을 가르쳐 온 전문가.", "knowsAbout": ["NPL", "부실채권", "권리분석", "질권설정", "NPL 수익률분석", "NPL 물건분석", "경공매"], "worksFor": { "@id": "https://moonnpl.co.kr/#org" } },
     { "@type": "Course", "@id": "https://moonnpl.co.kr/#course", "name": "NPL·경공매 초고수 핵심 공개특강", "description": "NPL 권리분석·NPL의 종류·매입방법·질권대출·물건분석·수익률분석 6가지 핵심 커리큘럼. 국내 1호 문정수 교수 직강.", "provider": { "@id": "https://moonnpl.co.kr/#org" }, "instructor": { "@id": "https://moonnpl.co.kr/#professor" }, "inLanguage": "ko-KR", "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "Onsite", "location": { "@type": "Place", "name": "강남 YBM 더비즈 501호", "address": "서울 강남구" } } },
     { "@type": "FAQPage", "@id": "https://moonnpl.co.kr/#faq", "mainEntity": [
-      {"@type":"Question","name":"부동산 투자 완전 초보인데 들어도 되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 9기수 수강생의 30% 이상이 부동산 투자 경험이 거의 없는 분들이었습니다. NPL은 권리 구조를 이해하는 게 핵심이라, 선입견이 없는 초보가 오히려 깨끗하게 시작하기 좋은 구조입니다."}},
+      {"@type":"Question","name":"부동산 투자 완전 초보인데 들어도 되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 수강생의 30% 이상이 부동산 투자 경험이 거의 없는 분들이었습니다. NPL은 권리 구조를 이해하는 게 핵심이라, 선입견이 없는 초보가 오히려 깨끗하게 시작하기 좋은 구조입니다."}},
       {"@type":"Question","name":"정말 소액으로도 시작이 가능한가요?","acceptedAnswer":{"@type":"Answer","text":"네. 질권대출을 활용한 레버리지 구조로 실투자금 1,500~3,000만 원 수준에서 접근 가능한 물건 유형이 다수 있으며, 본 강의에서 실제 소액 진입 시뮬레이션을 다룹니다. 단, 모든 투자는 개인 책임임을 전제로 합니다."}},
       {"@type":"Question","name":"경매·공매와 NPL은 정확히 뭐가 다른가요?","acceptedAnswer":{"@type":"Answer","text":"경매·공매는 낙찰자가 되는 게임이고, NPL은 그 물건의 권리자(채권자)가 되는 투자입니다. 낙찰장에서 경쟁하는 게 아니라, 경매가 진행되는 절차 위에서 먼저 게임을 시작하면서 게임의 위치 자체가 완전히 다릅니다."}},
       {"@type":"Question","name":"특강에서는 어떤 내용을 다루나요?","acceptedAnswer":{"@type":"Answer","text":"NPL의 핵심 구조, 경공매와의 차이, 실전 수익 사례, 권리분석 30분 룰 등 본 과정의 핵심을 약 2시간 압축해 공개합니다. NPL이 정말 나에게 맞는 투자인가를 직접 판단하실 수 있도록 구성했습니다."}},
@@ -478,6 +478,7 @@ html.anim .reveal.in{opacity:1;transform:none;}
 
 /* ===== SEC5 · scenarios ===== */
 .scn-tabs{display:inline-flex;gap:6px;margin-top:46px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);padding:6px;box-shadow:var(--sh-xs);flex-wrap:wrap;}
+@media(max-width:480px){.scn-tabs{display:flex;width:100%;border-radius:var(--r-lg);}.scn-tab{flex:1;text-align:center;font-size:0.72rem;padding:8px 4px;border-radius:var(--r-md)!important;}}
 .scn-tab{
   border:none;background:transparent;cursor:pointer;font-family:var(--sans);
   font-size:15px;font-weight:700;color:var(--t-ink-3);padding:12px 24px;border-radius:var(--r-pill);
@@ -550,7 +551,7 @@ html.anim .reveal.in{opacity:1;transform:none;}
 .lecture-band .lb-over{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,11,20,.85),rgba(8,11,20,.25));display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,42px);}
 .lecture-band .lb-over .t{font-size:clamp(18px,2.3vw,26px);font-weight:800;letter-spacing:-.02em;color:#fff;}
 .lecture-band .lb-over .s{margin-top:8px;font-size:14px;color:var(--cream-2);}
-@media(max-width:860px){.prof{grid-template-columns:1fr;gap:34px;}.prof-photo img{aspect-ratio:4/3;}.auth-stats{grid-template-columns:1fr 1fr;}.auth-stats .as:nth-child(2){border-right:none;}.auth-stats .as:nth-child(1),.auth-stats .as:nth-child(2){border-bottom:1px solid var(--line-dark);}}
+@media(max-width:860px){.prof{grid-template-columns:1fr;gap:34px;}.prof-photo img{aspect-ratio:4/3;object-position:top center;}.auth-stats{grid-template-columns:1fr 1fr;}.auth-stats .as:nth-child(2){border-right:none;}.auth-stats .as:nth-child(1),.auth-stats .as:nth-child(2){border-bottom:1px solid var(--line-dark);}}
 
 /* ===== SEC7 · reviews ===== */
 .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:54px;}
@@ -1041,7 +1042,6 @@ html.anim .reveal.in{opacity:1;transform:none;}
     <div class="prof">
       <div class="prof-photo reveal">
         <img src="https://ansojang.github.io/LPL-_Edu/assets/professor.jpg" alt="문정수 교수 프로필" />
-        <div class="seal"><span class="yy">2015</span><span class="tt">신데이뉴스<br />표지모델</span></div>
         <div class="cap"><b>문정수 교수</b>대한민국 NPL 1세대 · 부실채권 재테크 명강사</div>
       </div>
       <div class="prof-content reveal" data-d="1">
@@ -1058,7 +1058,7 @@ html.anim .reveal.in{opacity:1;transform:none;}
           <div class="as"><div class="v">27<small style="font-family:var(--sans);font-size:16px;">년</small></div><div class="l">국내 최장 NPL 강의 경력 · NPL 1세대</div></div>
           <div class="as"><div class="v" style="font-style:normal;">最初</div><div class="l">대한민국 최초 NPL 강의·교육과정 개설</div></div>
           <div class="as"><div class="v">20<small style="font-family:var(--sans);font-size:16px;">년+</small></div><div class="l">명지대 부동산대학원 주임교수 역임</div></div>
-          <div class="as"><div class="v">1,200<small style="font-family:var(--sans);font-size:16px;">명+</small></div><div class="l">누적 수강생 · 기수 연속 최고위과정 운영</div></div>
+          <div class="as"><div class="v">1,200<small style="font-family:var(--sans);font-size:16px;">명+</small></div><div class="l">누적 수강생 · 최고위과정 운영</div></div>
         </div>
       </div>
     </div>
@@ -1078,7 +1078,7 @@ html.anim .reveal.in{opacity:1;transform:none;}
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">07 — 누가 이 강의를 듣고 있나요</span>
-      <h2 class="section-title">직장인부터 변호사까지,<br /><span class="gold">9기수 수강생들의 공통점.</span></h2>
+      <h2 class="section-title">직장인부터 변호사까지,<br /><span class="gold">수강생들의 공통점.</span></h2>
       <p class="section-lede">특별한 사람들이 아닙니다. 월급쟁이, 주부, 은퇴 준비자 — 각자의 자리에서 NPL을 만난 사람들의 이야기입니다.</p>
     </div>
 
@@ -1130,7 +1130,7 @@ html.anim .reveal.in{opacity:1;transform:none;}
       <div class="faq-list reveal" data-d="1">
         <div class="faq-item open">
           <div class="faq-q"><span class="qn">Q1</span><span class="qt">부동산 투자 완전 초보인데 들어도 되나요?</span><span class="qx"></span></div>
-          <div class="faq-a"><div class="inner">네. 9기수 수강생의 30% 이상이 부동산 투자 경험이 거의 없는 분들이었습니다. NPL은 오히려 지나친 경쟁 대신 ‘권리 구조’를 이해하는 게 핵심이라, 기존 선입견이 없는 초보가 오히려 깨끗하게 시작하기 좋은 구조입니다.</div></div>
+          <div class="faq-a"><div class="inner">네. 수강생의 30% 이상이 부동산 투자 경험이 거의 없는 분들이었습니다. NPL은 오히려 지나친 경쟁 대신 ‘권리 구조’를 이해하는 게 핵심이라, 기존 선입견이 없는 초보가 오히려 깨끗하게 시작하기 좋은 구조입니다.</div></div>
         </div>
         <div class="faq-item">
           <div class="faq-q"><span class="qn">Q2</span><span class="qt">정말 소액으로도 시작이 가능한가요?</span><span class="qx"></span></div>
