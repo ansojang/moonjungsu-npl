@@ -1,5 +1,5 @@
 /* ===== 문정수 교수 NPL 특강 사이트 - Global Styles ===== */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 :root {
   --primary: #0d2137;
@@ -14,7 +14,7 @@
   --shadow: 0 4px 24px rgba(13,33,55,0.12);
   --shadow-lg: 0 8px 40px rgba(13,33,55,0.18);
   --radius: 12px;
-  --font: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  --font: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -750,10 +750,20 @@ nav ul li:last-child { margin-left: auto; }
 
 /* ===== PAGE HERO (inner pages) ===== */
 .page-hero {
-  background: linear-gradient(140deg, #091822 0%, var(--primary) 60%, #1a3a5c 100%);
+  background: linear-gradient(140deg, #080B14 0%, #0A0E1A 50%, #0E1424 100%);
   color: var(--white);
   padding: 64px 24px 56px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::after {
+  content: "";
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 55%; height: 90%;
+  background: radial-gradient(closest-side, rgba(200,162,76,.10), transparent 72%);
+  pointer-events: none;
 }
 
 .breadcrumb {
@@ -1087,6 +1097,7 @@ footer {
 @media (max-width: 960px) {
   .professor-wrap { grid-template-columns: 1fr; }
   .prof-photo-box { max-width: 280px; margin: 0 auto; }
+  .prof-photo-placeholder { object-fit: cover; object-position: top center; }
   .keyword-nav { grid-template-columns: repeat(2, 1fr); }
   .footer-top { grid-template-columns: 1fr 1fr; }
   .footer-top > :first-child { grid-column: 1 / -1; }
